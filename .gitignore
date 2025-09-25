@@ -1,0 +1,3 @@
+venv/
+kubectl.exe
+helm/fastapi-app/templates/tests/

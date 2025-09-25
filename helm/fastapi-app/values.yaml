@@ -1,0 +1,84 @@
+# Image settings
+image:
+  repository: fastapi-demo
+  tag: latest
+  pullPolicy: Never  # Local image in WSL2
+
+# Replica count
+replicaCount: 2
+
+# Service settings
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8000
+
+# Ingress settings
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: fastapi.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# Resource limits
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+# Database settings
+database:
+  host: postgresql
+  port: 5432
+  name: testdb
+  username: postgres
+  password: password
+
+# Environment variables
+env:
+  - name: DATABASE_URL
+    value: "postgresql://postgres:password@postgresql:5432/testdb"
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity: {}
+
+# Pod security context
+podSecurityContext: {}
+
+# Container security context  
+securityContext: {}
+
+# Service account
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# Autoscaling
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+# HTTPRoute
+httpRoute:
+  enabled: false        
+  annotations: {}       
+  parentRefs: []        
+  hostnames: []         
+  rules: []

@@ -1,0 +1,47 @@
+{{- $root := . -}}
+{{- with $root.Values.httpRoute }}
+  {{- if .enabled }}
+{{- $fullName := include "fastapi-app.fullname" $root -}}
+{{- $svcPort := $root.Values.service.port -}}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ $fullName }}
+  labels:
+{{ include "fastapi-app.labels" $root | nindent 4 }}
+  {{- with $root.Values.httpRoute.annotations }}
+  annotations:
+{{ toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+  {{- if $root.Values.httpRoute.parentRefs }}
+{{ toYaml $root.Values.httpRoute.parentRefs | indent 2 }}
+  {{- else }}
+  # no parentRefs configured
+  {{- end }}
+  {{- if $root.Values.httpRoute.hostnames }}
+  hostnames:
+{{ toYaml $root.Values.httpRoute.hostnames | indent 4 }}
+  {{- end }}
+  rules:
+  {{- range $i, $rule := $root.Values.httpRoute.rules }}
+  - {{- /* for each rule */ -}}
+    {{- with $rule.matches }}
+    matches:
+{{ toYaml . | indent 6 }}
+    {{- end }}
+    {{- with $rule.filters }}
+    filters:
+{{ toYaml . | indent 6 }}
+    {{- end }}
+    backendRefs:
+      - name: {{ $fullName }}
+        port: {{ $svcPort }}
+        weight: 1
+  {{- end }}
+  {{- if not $root.Values.httpRoute.rules }}
+  # no rules configured
+  {{- end }}
+  {{- end }}
+{{- end }}
