@@ -2,7 +2,7 @@
 image:
   repository: fastapi-demo
   tag: latest
-  pullPolicy: Never  # Local image in WSL2
+  pullPolicy: Never
 
 # Replica count
 replicaCount: 2
@@ -40,12 +40,15 @@ database:
   port: 5432
   name: testdb
   username: postgres
-  password: password
+  password: ""
 
 # Environment variables
 env:
   - name: DATABASE_URL
-    value: "postgresql://postgres:password@postgresql:5432/testdb"
+    valueFrom:
+      secretKeyRef:
+        name: postgresql-secret
+        key: database-url
 
 # Node selector
 nodeSelector: {}
