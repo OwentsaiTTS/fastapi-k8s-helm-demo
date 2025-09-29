@@ -4,7 +4,10 @@ This project is a hands-on learning experience that demonstrates deploying a **F
 
 ## Architecture & Workflow
 
+### System Architecture
 ![System Architecture](./fig/System-architecture.png)
+
+### Network Communication Flow
 ![Network Communication Flow](./fig/Network-communication-flow.png)
 
 ## Key Features
